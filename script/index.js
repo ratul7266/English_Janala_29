@@ -20,6 +20,38 @@ const loadLevelWord = (id) => {
     });
 };
 
+const loadWordDetail = async (id) => {
+  const url = `https://openapi.programming-hero.com/api/word/${id}`;
+  const res = await fetch(url);
+  const details = await res.json();
+  displayWordDetails(details.data);
+};
+const displayWordDetails = (word) => {
+  console.log(word);
+  const detailsBox = document.getElementById("details-container");
+  detailsBox.innerHTML = `
+          <div class="">
+            <h2 class="text-2xl font-bold mb-3">
+              ${word.word} (<i class="fa-solid fa-microphone"></i> :${word.pronunciation})
+            </h2>
+            <div>
+              <h2 class="font-semibold mb-3 text-xl">Meaning</h2>
+              <p class="font-bangla font-semibold mb-3">${word.meaning}</p>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-3">Example</h3>
+              <p>${word.sentence}</p>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-bangla text-xl font-semibold mb-3">সমার্থক শব্দ গুলো</h3>
+            <span class="btn">${word.synonyms[0]}</span>
+            <span class="btn">${word.synonyms[1]}</span>
+            <span class="btn">${word.synonyms[2]}</span>
+          </div>
+  `;
+  document.getElementById("word_modal").showModal();
+};
 const displayLevelWord = (words) => {
   const wordContaienr = document.getElementById("word-container");
   wordContaienr.innerHTML = "";
@@ -39,11 +71,11 @@ const displayLevelWord = (words) => {
     const card = document.createElement("div");
     card.innerHTML = `
     <div class="bg-white rounded-xl shadow-sm text-center py-10 px-5 space-y-4">
-      <h2 class="font-bold text-2xl">${word.word ? word : "শব্দ পাওয়া যায়নি।"}</h2>
+      <h2 class="font-bold text-2xl">${word.word ? word.word : "শব্দ পাওয়া যায়নি।"}</h2>
       <p class="font-semibold">Meaning /Pronounciation</p>
       <div class="font-bangla text-2xl font-medium text-gray-600">"${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি।"} / ${word.pronunciation ? word.pronunciation : "Pronunciation পাওয়া যায়নি। "}"</div>
       <div class="flex justify-between items-center">
-        <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info fa-lg"></i></button>
+        <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info fa-lg"></i></button>
         <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high fa-lg"></i></button>
       </div>
     </div>
