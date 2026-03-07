@@ -3,12 +3,20 @@ const createElement = (arr) => {
   return htmlElements.join(" ");
 };
 
+function pronunceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN";
+  window.speechSynthesis.speak(utterance);
+}
+
 const manageSpinner = (status) => {
   if (status == true) {
     document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("spinner").classList.add("flex");
     document.getElementById("word-container").classList.add("hidden");
   } else {
     document.getElementById("word-container").classList.remove("hidden");
+    document.getElementById("spinner").classList.remove("flex"); // 👈 add this
     document.getElementById("spinner").classList.add("hidden");
   }
 };
@@ -92,7 +100,7 @@ const displayLevelWord = (words) => {
       <div class="font-bangla text-2xl font-medium text-gray-600">"${word.meaning ? word.meaning : "অর্থ পাওয়া যায়নি।"} / ${word.pronunciation ? word.pronunciation : "Pronunciation পাওয়া যায়নি। "}"</div>
       <div class="flex justify-between items-center">
         <button onclick="loadWordDetail(${word.id})" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info fa-lg"></i></button>
-        <button class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high fa-lg"></i></button>
+        <button onclick="pronunceWord('${word.word}')" class="btn bg-[#1A91FF10] hover:bg-[#1A91FF80]"><i class="fa-solid fa-volume-high fa-lg"></i></button>
       </div>
     </div>
     `;
